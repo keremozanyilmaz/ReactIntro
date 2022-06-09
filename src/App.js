@@ -3,6 +3,10 @@ import { Container, Row, Col } from "reactstrap";
 import CategoryList from "./CategoryList";
 import Navi from "./Navi";
 import ProductList from "./ProductList";
+import alertify from "alertifyjs";
+import { Route, Routes } from "react-router-dom";
+import NotFound from "./NotFound";
+import CartList from "./CartList";
 
 export default class App extends Component {
   state = { currentCategory: "", products: [], cart: [] };
@@ -36,6 +40,12 @@ export default class App extends Component {
     }
 
     this.setState({ cart: newCart });
+    alertify.success(product.productName + " added to cart!", 2);
+  };
+
+  removeFromCart = (product) => {
+    let newCart = this.state.cart.filter((c) => c.product.id !== product.id);
+    this.setState({ cart: newCart });
   };
 
   render() {
@@ -44,7 +54,7 @@ export default class App extends Component {
     return (
       <div>
         <Container>
-          <Navi cart={this.state.cart} />
+          <Navi removeFromCart={this.removeFromCart} cart={this.state.cart} />
 
           <Row>
             <Col xs="3">
@@ -55,12 +65,24 @@ export default class App extends Component {
               />
             </Col>
             <Col xs="9">
-              <ProductList
-                products={this.state.products}
-                addToCart={this.addToCart}
-                currentCategory={this.state.currentCategory}
-                info={productInfo}
-              />
+              <Routes>
+                <Route
+                  path="/"
+                  render={(props) => (
+                    <ProductList
+                      {...props}
+                      products={this.state.products}
+                      addToCart={this.addToCart}
+                      currentCategory={this.state.currentCategory}
+                      info={productInfo}
+                    />
+                  )}
+                >
+                  <Route path="/cart" element={<CartList />}>
+                    <Route element={<NotFound />}></Route>
+                  </Route>
+                </Route>
+              </Routes>
             </Col>
           </Row>
         </Container>
