@@ -1,3 +1,7 @@
+Engin Demiroğ'un React derslerini izleyerek geliştirdiğim projedir.
+Kullanılan teknolojiler; React , Redux, Hooks, Api, AlertifyJS
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
